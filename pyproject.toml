@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "catch-the-thief"
+version = "0.1.0"
+description = "Identify unknown AI agents in your app and jail them instead of trusting them: Web Bot Auth, consent-bound parole, and a live jail dashboard."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Saurabh Manmode" }]
+keywords = ["ai-agents", "bot-detection", "web-bot-auth", "fraud", "security", "fintech", "fastapi", "asgi"]
+classifiers = [
+  "Framework :: FastAPI",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+  "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+]
+dependencies = ["starlette>=0.37", "cryptography>=42"]
+
+[project.optional-dependencies]
+test = ["httpx>=0.27", "jinja2>=3.1", "python-multipart>=0.0.9"]
+demo = ["uvicorn>=0.30", "jinja2>=3.1", "python-multipart>=0.0.9", "httpx>=0.27", "playwright>=1.45"]
+
+[project.urls]
+Homepage = "https://github.com/SaurabhManmode/catch-the-thief"
+
+[tool.setuptools]
+packages = ["catch_the_thief"]
+
+[tool.setuptools.package-data]
+catch_the_thief = ["static/*.js"]

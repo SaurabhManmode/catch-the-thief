@@ -1,0 +1,12 @@
+{
+  "name": "Budget Buddy",
+  "operator": "budgetbuddy.example",
+  "keys": [
+    {
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "x": "xw1rELC09hxA3CqLRbhMH_Z7Tt6Lr-EboyEl-LT0sA0",
+      "kid": "N1bwCxVuUhlmAgX10K48OczLbFOChDaCJ6K-d80fwCQ"
+    }
+  ]
+}

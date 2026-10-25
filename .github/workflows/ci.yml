@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e ".[test]"
+      - run: python -m unittest discover -s tests -v
+
+  # Runs the real attack scenarios from the README in a real browser.
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[demo]" && playwright install --with-deps chromium
+      - name: Start Bank of Nowhere
+        run: |
+          uvicorn demo.bank:app --port 8000 &
+          for i in $(seq 1 30); do curl -sf localhost:8000/jail/ >/dev/null && break; sleep 1; done
+      - name: Thieves get held (exit 0 means the money did not move)
+        run: |
+          python -m demo.thief --disguise 0
+          python -m demo.thief --disguise 1
+          python -m demo.thief --disguise 2
+      - name: Good agent gets paroled, impostor gets nothing
+        run: |
+          python -m demo.good_agent | tee good.txt
+          grep -q "ALLOW  Budget Buddy is on parole" good.txt
+          python -m demo.good_agent --stolen | tee stolen.txt
+          grep -q "HTTP 401" stolen.txt
